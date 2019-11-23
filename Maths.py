@@ -30,6 +30,17 @@ class network:
                 currentLayer.compute(self.layers[onLayer-1])
             onLayer += 1
 
+def costOnNode(nodeValue, shouldBe):
+    return (nodeValue - shouldBe)**2
+
+def cost(outputNodes, shouldBe):
+    totalCost = 0
+    onNode = 0
+    for currentNode in outputNodes:
+        totalCost += costOnNode(currentNode.value, shouldBe[onNode])
+        onNode += 1
+    return totalCost
+
 def test2():
     myNetwork = network()
     myNetwork.layers = [layer(),layer()]
@@ -47,7 +58,10 @@ def test2():
     myNetwork.compute()
 
     for i in myNetwork.layers[1].nodes:
-        print(i.value)
+        print(str(i.value) + " - " + str(costOnNode(i.value, 1)))
+    print()
+    print(cost(myNetwork.layers[1].nodes,[1,1,1]))
+    
         
 def test():
     layer1 = layer()
