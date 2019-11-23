@@ -1,6 +1,8 @@
 import math
+
 def sigmoid(value):
     return 1/(1+(math.e**(-value)))
+
 class node:
     value = 0
     weights = []
@@ -19,6 +21,34 @@ class layer:
         for currentNode in self.nodes:
             currentNode.value = currentNode.compute(lastLayer.nodes)
 
+class network:
+    layers = []
+    def compute(self):
+        onLayer = 0
+        for currentLayer in self.layers:
+            if onLayer != 0:
+                currentLayer.compute(self.layers[onLayer-1])
+            onLayer += 1
+
+def test2():
+    myNetwork = network()
+    myNetwork.layers = [layer(),layer()]
+    myNetwork.layers[0].nodes = [node(),node(),node()]
+    myNetwork.layers[0].nodes[0].value = 1
+    myNetwork.layers[0].nodes[1].value = 1
+    myNetwork.layers[0].nodes[2].value = 0
+
+    myNetwork.layers[1].nodes = [node(),node(),node()]
+    myNetwork.layers[1].nodes[0].weights = [1,1,1]
+    myNetwork.layers[1].nodes[1].weights = [0,0,1]
+    myNetwork.layers[1].nodes[2].weights = [0,0,1]
+    myNetwork.layers[1].nodes[1].bias = 100
+
+    myNetwork.compute()
+
+    for i in myNetwork.layers[1].nodes:
+        print(i.value)
+        
 def test():
     layer1 = layer()
     layer1.nodes = [node(),node(),node()]
