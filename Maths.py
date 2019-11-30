@@ -106,22 +106,39 @@ def test2():
         print(cost(myNetwork.layers[1].nodes,[1,1,1]))
         
 def test():
-    layer1 = layer()
-    layer1.nodes = [node(),node(),node()]
-    layer1.nodes[0].value = 1
-    layer1.nodes[1].value = 1
-    layer1.nodes[2].value = 0
+    myNetwork = network()
+    myNetwork.layers = [layer(),layer(),layer(),layer()]
+    myNetwork.layers[0].nodes = [node(),node(),node()]
+    myNetwork.layers[0].nodes[0].value = 1
+    myNetwork.layers[0].nodes[1].value = 1
+    myNetwork.layers[0].nodes[2].value = 0
 
-    layer2 = layer()
-    layer2.nodes = [node(),node(),node()]
-    layer2.nodes[0].weights = [1,1,1]
-    layer2.nodes[1].weights = [0,0,1]
-    layer2.nodes[2].weights = [0,0,1]
+    myNetwork.layers[1].nodes = [node(),node(),node()]
+    myNetwork.layers[1].nodes[0].weights = [1,1,1]
+    myNetwork.layers[1].nodes[1].weights = [0,0,1]
+    myNetwork.layers[1].nodes[2].weights = [0,0,1]
 
-    layer2.nodes[1].bias = 100
+    myNetwork.layers[2].nodes = [node(),node(),node()]
+    myNetwork.layers[2].nodes[0].weights = [1,0,1]
+    myNetwork.layers[2].nodes[1].weights = [1,0,1]
+    myNetwork.layers[2].nodes[2].weights = [0,2,0]
     
-    layer2.compute(layer1)
+    myNetwork.layers[3].nodes = [node(),node(),node(),node(),node()]
+    myNetwork.layers[3].nodes[0].weights = [1,5,6]
+    myNetwork.layers[3].nodes[1].weights = [2,5,3]
+    myNetwork.layers[3].nodes[2].weights = [0,2,1]
+    myNetwork.layers[3].nodes[3].weights = [1,2,1]
+    myNetwork.layers[3].nodes[4].weights = [5,2,1]
     
-    for i in layer2.nodes:
-        print(i.value)
+    myNetwork.compute()
+
+    meantToBe = [0,0.2, 0.4, 0.6, 0.8]
+    while(cost(myNetwork.layers[3].nodes, meantToBe)>0.0001):
+        backProp(myNetwork, meantToBe ,0.1 , 0.01)
+        a = 0
+        for i in myNetwork.layers[3].nodes:
+            print(str(i.value) + " - " + str(costOnNode(i.value, meantToBe[a])))
+            a+=1
+        print()
+        print(cost(myNetwork.layers[1].nodes,[1,1,1]))
     
